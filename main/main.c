@@ -51,13 +51,14 @@ void usbh_get_device_desc_cb(uint8_t *data_buffer, size_t num_bytes, void *conte
 {
     ESP_LOG_BUFFER_HEX_LEVEL("DEVICE descriptor", data_buffer, num_bytes, ESP_LOG_INFO);
     parse_cfg_descriptor(data_buffer, 0, num_bytes, &conf_num);
-
+    ESP_LOGI("ADDRESS", "DEVICE descriptor 1");
     usb_desc_devc_t* desc = (usb_desc_devc_t*)data_buffer;
     xfer_get_string(port_hdl, ctrl_pipe_hdl, desc->iManufacturer);
     xfer_get_string(port_hdl, ctrl_pipe_hdl, desc->iSerialNumber);
     xfer_get_string(port_hdl, ctrl_pipe_hdl, desc->iProduct);
-
+    ESP_LOGI("ADDRESS", "DEVICE descriptor 2");
     xfer_set_address(port_hdl, ctrl_pipe_hdl, DEVICE_ADDR);
+    ESP_LOGI("ADDRESS", "DEVICE descriptor 3");
 }
 
 void usbh_set_address_cb(uint16_t addr, void *context)
@@ -72,13 +73,16 @@ void usbh_get_config_desc_cb(uint8_t *data_buffer, size_t num_bytes, void *conte
 {
     ESP_LOG_BUFFER_HEX_LEVEL("CONFIG descriptor", data_buffer, num_bytes, ESP_LOG_INFO);
     parse_cfg_descriptor(data_buffer, 0, num_bytes, &conf_num);
-
+    ESP_LOGI("ADDRESS", "CONFIG descriptor 1");
     // xfer_get_current_config(port_hdl, ctrl_pipe_hdl);
     xfer_set_idle(port_hdl, ctrl_pipe_hdl);
     vTaskDelay(5);
+    ESP_LOGI("ADDRESS", "CONFIG descriptor 2");
     get_hid_report_descriptor(port_hdl, ctrl_pipe_hdl);
     vTaskDelay(5);
+    ESP_LOGI("ADDRESS", "CONFIG descriptor 3");
     xfer_in_data();
+    ESP_LOGI("ADDRESS", "CONFIG descriptor 4");
 }
 
 void usbh_set_config_desc_cb(uint16_t data, void *context)

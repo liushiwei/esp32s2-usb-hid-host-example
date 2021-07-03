@@ -25,6 +25,7 @@ static void create_pipe(usb_desc_ep_t* ep)
     {
         case 0x03:
             hid_create_pipe(ep);
+             printf("\nhid_create_pipe out\n");
             break;
         
         default:

@@ -16,6 +16,7 @@
 #include <string.h>
 
 #define USB_DESC_EP_GET_ADDRESS(desc_ptr) ((desc_ptr).bEndpointAddress & 0x7F)
+#define USB_DESC_EP_GET_MAXPACKETSIZE(desc_ptr) ((desc_ptr).wMaxPacketSize)
 #define SET_VALUE       0x21
 #define SET_IDLE        0x0A
 
@@ -163,9 +164,8 @@ static usb_irp_t *allocate_hid_irp(hcd_port_handle_t port_hdl, size_t size)
 
 void xfer_in_data()
 {
-    usb_irp_t *irp = allocate_hid_irp(port_hdl, 6);
-    ESP_LOGD("", "EP: 0x%02x", USB_DESC_EP_GET_ADDRESS(endpoint));
-
+    usb_irp_t *irp = allocate_hid_irp(port_hdl, USB_DESC_EP_GET_MAXPACKETSIZE(endpoint));
+    ESP_LOGW("", "EP: 0x%02x", USB_DESC_EP_GET_ADDRESS(endpoint));
     esp_err_t err;
     if(ESP_OK != (err = hcd_irp_enqueue(hid_handle, irp))) {
         ESP_LOGW("", "INTR irp enqueue err: 0x%x", err);
